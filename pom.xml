@@ -6,6 +6,7 @@
     <modules>
         <!--声明子模块-->
         <module>eureka</module>
+        <module>system</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
