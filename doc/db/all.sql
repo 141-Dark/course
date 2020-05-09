@@ -1,0 +1,1 @@
+insert into `test`(id,name ) values(3,'蒸汽小飞机')
