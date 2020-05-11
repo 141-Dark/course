@@ -11,6 +11,8 @@
        <!--生成的实体类添加toString方法-->
        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
+       <!--每次覆盖生成的xml文件,只有在1.3.7之后的版本才可以用-->
+       <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
        <!--由于生成的注释是英文，所以不生成-->
        <commentGenerator>
            <property name="suppressAllComments" value="true"></property>
