@@ -38,5 +38,6 @@
                             type="XMLMAPPER"
        />
        <table tableName="test" domainObjectName="Test"/>
+       <table tableName="count" domainObjectName="Count"></table>
    </context>
 </generatorConfiguration>
