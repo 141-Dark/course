@@ -935,7 +935,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
-
+                                <router-view></router-view>
                                 <!-- PAGE CONTENT ENDS -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
@@ -976,7 +976,15 @@
     </div>
 </template>
 <script>
-    //script中的所有代码都是公用的，因为它是SPA项目
-    $('body').removeClass('login-layout light-login')
-    $('body').attr('class', 'no-skin');
+    export default {
+        //组件名
+        name:"admin",
+        methods:{
+            mounted:function(){
+                //script中的所有代码都是公用的，因为它是SPA项目
+                $('body').removeClass('login-layout light-login')
+                $('body').attr('class', 'no-skin');
+            },
+        }
+    }
 </script>

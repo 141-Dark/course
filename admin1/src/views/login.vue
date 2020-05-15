@@ -108,10 +108,14 @@
 </template>
 
 <script>
-    $('body').attr('class', 'login-layout light-login');
     export default {
         name: "login",
         methods:{
+            //vue组件初始化时必须执行的方法,组件每次加载，mounted都会重新执行
+            mounted:function(){
+                $('body').removeClass('no-skin');
+                $('body').attr('class','login-layout light-login')
+            },
             logintest(){
                 this.$router.push("/admin")
             }
