@@ -25,7 +25,7 @@ Vue.use(Router)
            path:'welcome',
            component:Welcome
        },{
-           path:'chapter',
+           path:'business/chapter',
            component: Chapter
        }]
    }]
