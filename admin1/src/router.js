@@ -10,7 +10,7 @@ Vue.use(Router)
    base:process.env.BABEL_ENV,
    routes:[{
      //不管在地址栏中输入什么都会对应login
-     path:'*',
+     path:'/',
      redirect:"/login"
    },{
         //配置路由，对应加载组件Login
@@ -18,14 +18,18 @@ Vue.use(Router)
         component:Login
    },{
        //配置路由，加载对应的组件admin
-       path:'/admin',
+       path:'/',
+       //为路由添加名称
+       name:'admin',
        component:Admin,
        //添加admin的子路由,子路由中没有/
        children:[{
            path:'welcome',
+           name:'welcome',
            component:Welcome
        },{
            path:'business/chapter',
+           name:'business/chapter',
            component: Chapter
        }]
    }]

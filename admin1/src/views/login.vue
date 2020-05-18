@@ -117,7 +117,7 @@
         },
         methods:{
             logintest(){
-                this.$router.push("/admin")
+                this.$router.push("/welcome")
             }
         }
     }

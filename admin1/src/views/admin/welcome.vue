@@ -9,7 +9,7 @@
         name:"welcome",
         mounted() {
             //调用父组件的方法
-            this.$parent.activeSlidebar("welcome-sidebar")
+            //this.$parent.activeSlidebar("welcome-sidebar")
         }
     }
 </script>

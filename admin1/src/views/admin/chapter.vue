@@ -979,7 +979,7 @@
         name:"chapter",
         mounted() {
             //调用父组件的方法
-            this.$parent.activeSlidebar("business-chapter-sidebar")
+            //this.$parent.activeSlidebar("business-chapter-sidebar")
         }
     }
 </script>

@@ -356,7 +356,7 @@
 
                 <ul class="nav nav-list">
                     <li class="" id="welcome-sidebar">
-                        <router-link to="/admin/welcome">
+                        <router-link to="/welcome">
                             <i class="menu-icon fa fa-tachometer"></i>
                             <span class="menu-text">欢迎</span>
                         </router-link>
@@ -406,7 +406,7 @@
 
                         <ul class="submenu">
                             <li class="active" id="business-chapter-sidebar">
-                                <router-link to="/admin/business/chapter">
+                                <router-link to="/business/chapter">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     大章管理
                                 </router-link>
@@ -504,9 +504,24 @@
         //组件名
         name:"admin",
         mounted:function(){
+            let _this = this
             //script中的所有代码都是公用的，因为它是SPA项目
             $('body').removeClass('login-layout light-login')
             $('body').attr('class', 'no-skin');
+            //
+            _this.activeSlidebar(_this.route.name.replace("/","-")+"-sidebar")
+        },
+        watch:{
+            //当路由发生变化时需要完成的通用方法
+            $route:{
+                handler:function () {
+                    let _this = this;
+                    //页面加载完成后执行
+                    _this.nextTick(function () {
+                        _this.activeSlidebar(_this.route.name.replace("/","-")+"-sidebar")
+                    })
+                }
+            }
         },
         methods:{
              login(){
