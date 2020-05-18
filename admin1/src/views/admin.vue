@@ -517,7 +517,7 @@
                 handler:function () {
                     let _this = this;
                     //页面加载完成后执行
-                    _this.nextTick(function () {
+                    _this.$nextTick(function () {
                         _this.activeSlidebar(_this.route.name.replace("/","-")+"-sidebar")
                     })
                 }

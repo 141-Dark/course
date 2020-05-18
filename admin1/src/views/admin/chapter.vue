@@ -980,6 +980,17 @@
         mounted() {
             //调用父组件的方法
             //this.$parent.activeSlidebar("business-chapter-sidebar")
+            let _this = this
+            _this.list()
+        },
+        methods:{
+            //该方法在页面加载后执行
+            list(){
+                let _this = this;
+                _this.ajax.get('http://127.0.0.1:9002/business/admin/chapter/list').then((response)=>{
+                    console.log("查询结果",response)
+                })
+            }
         }
     }
 </script>
