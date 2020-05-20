@@ -509,7 +509,7 @@
             $('body').removeClass('login-layout light-login')
             $('body').attr('class', 'no-skin');
             //
-            _this.activeSlidebar(_this.route.name.replace("/","-")+"-sidebar")
+            _this.activeSlidebar(_this.$route.name.replace("/","-")+"-sidebar")
         },
         watch:{
             //当路由发生变化时需要完成的通用方法
@@ -518,7 +518,7 @@
                     let _this = this;
                     //页面加载完成后执行
                     _this.$nextTick(function () {
-                        _this.activeSlidebar(_this.route.name.replace("/","-")+"-sidebar")
+                        _this.activeSlidebar(_this.$route.name.replace("/","-")+"-sidebar")
                     })
                 }
             }

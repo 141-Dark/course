@@ -4,6 +4,7 @@ import com.course.server.domain.ChapterExample;
 import com.course.server.dto.ChapterDto;
 import com.course.server.mapper.ChapterMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
     public List<ChapterDto> list(){
+        PageHelper.startPage(1,1);
         ChapterExample chapterExample = new ChapterExample();
 
         //chapterExample.setOrderByClause("id desc");//根据id倒叙，作为条件
