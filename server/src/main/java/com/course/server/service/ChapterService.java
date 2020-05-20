@@ -2,9 +2,11 @@ package com.course.server.service;
 import com.course.server.domain.Chapter;
 import com.course.server.domain.ChapterExample;
 import com.course.server.dto.ChapterDto;
+import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +18,16 @@ import java.util.List;
 public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
-    public List<ChapterDto> list(){
-        PageHelper.startPage(1,1);
+    public void list(PageDto pageDto){
+        //指定当前页码和页面中的数据条数
+        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         ChapterExample chapterExample = new ChapterExample();
 
-        //chapterExample.setOrderByClause("id desc");//根据id倒叙，作为条件
-        //chapterExample.createCriteria().andIdEqualTo("2");
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);//根据条件输出
+
+        //设置总页数
+        PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
+        pageDto.setTotal(pageInfo.getTotal());
 
         //完成从数据库实体拷贝到dto实体
         List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
@@ -34,6 +39,7 @@ public class ChapterService {
             //将dto中的值添加到chapterDtoList列表中
             chapterDtoList.add(chapterDto);
         }
-        return chapterDtoList;
+        //返回数据集
+        pageDto.setList(chapterDtoList);
     }
 }
