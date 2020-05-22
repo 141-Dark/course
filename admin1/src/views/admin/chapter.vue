@@ -1,11 +1,12 @@
 <template>
     <div>
         <p>
-            <button @click="list()" class="btn btn-white btn-default btn-round">
+            <button @click="list(1)" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-refresh"></i>
                 刷新页面
             </button>
         </p>
+        <pagination ref="pagination" v-bind:list="list" v-bind:item-count="8"></pagination>
         <table id="simple-table" class="table  table-bordered table-hover">
                     <thead>
                     <tr>
@@ -82,7 +83,13 @@
 </template>
 
 <script>
+    //导入pagination组件
+    import pagination from '../../components/pagination'
     export default {
+        //声明子组件
+        components:{
+            pagination
+        },
         name:"chapter",
         data:function () {
             return{
@@ -93,17 +100,23 @@
             //调用父组件的方法
             //this.$parent.activeSlidebar("business-chapter-sidebar")
             let _this = this
-            _this.list()
+            _this.$refs.pagination.size = 5
+            _this.list(1)
         },
         methods:{
             //该方法在页面加载后执行
-            list(){
+            list(page){
                 let _this = this;
-                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',{page :1,size : 1}).then((response)=>{
+                //查询每页之前对页面条数设置
+                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',
+                    {page :page, size : _this.$refs.pagination.size}).then((response)=>{
                     console.log("查询结果",response)
                     _this.chapters = response.data.list
+                    //render是重新渲染(将数据传递到pagination组件内部)
+                    _this.$refs.pagination.render(page,response.data.total)
                 })
-            }
+            },
+
         }
     }
 </script>
