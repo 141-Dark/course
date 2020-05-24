@@ -1,10 +1,11 @@
 package com.course.server.service;
+
 import com.course.server.domain.Chapter;
 import com.course.server.domain.ChapterExample;
 import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
-import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -41,5 +42,22 @@ public class ChapterService {
         }
         //返回数据集
         pageDto.setList(chapterDtoList);
+    }
+
+
+    /*
+    * 插入数据
+    * 在插入数据时要先将dto转换成dao，在取出数据集时，将dao转为dto
+    * */
+    public void save(ChapterDto chapterDto){
+        //设置id
+        chapterDto.setId(UuidUtil.getShortId());
+
+        Chapter chapter = new Chapter();
+        //类型转换
+        BeanUtils.copyProperties(chapterDto,chapter);
+
+        chapterMapper.insert(chapter);
+
     }
 }

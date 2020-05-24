@@ -1,9 +1,14 @@
 <template>
     <div>
         <p>
+            <button @click="add()" class="btn btn-white btn-default btn-round">
+                <i class="ace-icon fa fa-edit"></i>
+                编辑
+            </button>
+            &emsp;
             <button @click="list(1)" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-refresh"></i>
-                刷新页面
+                刷新
             </button>
         </p>
         <pagination ref="pagination" v-bind:list="list" v-bind:item-count="8"></pagination>
@@ -79,6 +84,40 @@
                     </tr>
                     </tbody>
                 </table>
+        <!-- Button trigger modal -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">表单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">名称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" v-model="chapter.name" class="form-control" id="inputEmail3" placeholder="名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail4" class="col-sm-2 control-label">课程ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" v-model="chapter.courseId" class="form-control" id="inputEmail4" placeholder="课程ID">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button"  v-on:click="save()" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -93,7 +132,8 @@
         name:"chapter",
         data:function () {
             return{
-                chapters:[]
+                chapters:[],
+                chapter:{}
             }
         },
         mounted() {
@@ -117,6 +157,20 @@
                 })
             },
 
+            //模态框操作
+            add(){
+                //$(".modal")中的modal是CSS选择器,modal()中的参数(show和)是内置的方法，用于弹出或关闭模态框
+                $(".modal").modal("show")
+            },
+
+            //保存大章数据
+            save(){
+                let  _this  = this
+                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
+                    _this.chapter).then((response)=>{
+                    console.log("保存结果",response)
+                })
+            }
         }
     }
 </script>
