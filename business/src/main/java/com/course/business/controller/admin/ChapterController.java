@@ -3,11 +3,12 @@ import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.ChapterService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
+/*
+* RequestMapping和PostMapping的区别在于Post指定了前端传递参数的方式必须是Post
+* */
 @RestController
 @RequestMapping("/admin/chapter")
 public class ChapterController {
@@ -24,13 +25,26 @@ public class ChapterController {
         return responseDto;
     }
 
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public ResponseDto save(@RequestBody ChapterDto chapterDto){
         //新建统一返回值
         ResponseDto responseDto = new ResponseDto();
 
         chapterService.save(chapterDto);
         responseDto.setContent(chapterDto);
+        return responseDto;
+    }
+
+    /*
+    * PathVariable获取路径上的参数
+    * */
+    @DeleteMapping("/delete/{id}")
+    public ResponseDto delete(@PathVariable String id){
+        //新建统一返回值
+        ResponseDto responseDto = new ResponseDto();
+
+        chapterService.delete(id);
+
         return responseDto;
     }
 }

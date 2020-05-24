@@ -35,7 +35,7 @@
                                     <i class="ace-icon fa fa-pencil bigger-120"></i>
                                 </button>
 
-                                <button class="btn btn-xs btn-danger">
+                                <button @click="del(chapter.id)" class="btn btn-xs btn-danger">
                                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                 </button>
 
@@ -186,6 +186,21 @@
                 //解决vue双向绑定时不保存也会显示修改后的数据（并没有真正保存到数据库）的问题
                 _this.chapter = $.extend({},chapter)//临时放到{}中
                 $("#form-modal").modal("show")
+            },
+
+            //删除大章数据
+            del(id){
+                let  _this  = this
+                _this.ajax.delete('http://127.0.0.1:9000/business/admin/chapter/delete/'+id).then((response)=>{
+                    console.log("删除结果",response)
+
+                    let resp = response.data
+                    //判断保存是否成功(成功则关闭模态框并从新刷新列表)
+                    if(resp.success){
+                        //刷新列表
+                        _this.list(1)
+                    }
+                })
             },
         }
     }
