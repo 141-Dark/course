@@ -113,7 +113,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button"  v-on:click="save()" class="btn btn-primary">保存</button>
+                        <button type="button"  v-on:click="save()" class="btn btn-primary" data-dismiss="modal">保存</button>
                     </div>
                 </div>
             </div>
@@ -166,10 +166,17 @@
             //保存大章数据
             save(){
                 let  _this  = this
-                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
-                    _this.chapter).then((response)=>{
-                    console.log("保存结果",response)
-                })
+                if(_this.chapter==''){
+                    alert("输入框不能为空")
+
+                }else {
+                    _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
+                        _this.chapter).then((response)=>{
+                        console.log("保存结果",response)
+                    })
+                    //清空输入框
+                    _this.chapter=''
+                }
             }
         }
     }
