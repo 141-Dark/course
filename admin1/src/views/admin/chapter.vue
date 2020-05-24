@@ -3,7 +3,7 @@
         <p>
             <button @click="add()" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-edit"></i>
-                编辑
+                增加
             </button>
             &emsp;
             <button @click="list(1)" class="btn btn-white btn-default btn-round">
@@ -30,11 +30,8 @@
 
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
-                                <button class="btn btn-xs btn-success">
-                                    <i class="ace-icon fa fa-check bigger-120"></i>
-                                </button>
 
-                                <button class="btn btn-xs btn-info">
+                                <button @click="edit(chapter)" class="btn btn-xs btn-info">
                                     <i class="ace-icon fa fa-pencil bigger-120"></i>
                                 </button>
 
@@ -178,7 +175,16 @@
             },
             //模态框操作
             add(){
+                let _this = this
+                _this.chapter = {}
                 //$("#form-modal")中的modal是CSS选择器,modal()中的参数(show和)是内置的方法，用于弹出或关闭模态框
+                $("#form-modal").modal("show")
+            },
+            //点击哪一行就将哪一行的数据代入编辑
+            edit(chapter){
+                let _this = this
+                //解决vue双向绑定时不保存也会显示修改后的数据（并没有真正保存到数据库）的问题
+                _this.chapter = $.extend({},chapter)//临时放到{}中
                 $("#form-modal").modal("show")
             },
         }

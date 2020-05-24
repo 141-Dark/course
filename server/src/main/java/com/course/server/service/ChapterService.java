@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -44,12 +45,35 @@ public class ChapterService {
         pageDto.setList(chapterDtoList);
     }
 
-
     /*
-    * 插入数据
-    * 在插入数据时要先将dto转换成dao，在取出数据集时，将dao转为dto
+    * 在这里同时实现新增和修改，所以这里要做一点判断（如果id属性有值则认为是修改，没有值则认为是新增）
     * */
     public void save(ChapterDto chapterDto){
+        //判断是否为空,如果为空则调用insert方法
+        if(StringUtils.isEmpty(chapterDto.getId())){
+            this.insert(chapterDto);
+        }else {
+            //更新（修改）内容
+            this.update(chapterDto);
+        }
+    }
+    /*
+    * 更新(这个方法是service内部使用的，所以不要暴露出去)
+    * */
+    private void update(ChapterDto chapterDto){
+        Chapter chapter = new Chapter();
+        //类型转换
+        BeanUtils.copyProperties(chapterDto,chapter);
+
+        chapterMapper.updateByPrimaryKey(chapter);
+
+    }
+    /*
+     * 插入数据
+     * 在插入数据时要先将dto转换成dao，在取出数据集时，将dao转为dto
+     * 这个方法没有被Controller调用，只被save方法调用过
+     * */
+    private void insert(ChapterDto chapterDto){
         //设置id
         chapterDto.setId(UuidUtil.getShortId());
 
@@ -60,4 +84,5 @@ public class ChapterService {
         chapterMapper.insert(chapter);
 
     }
+
 }
