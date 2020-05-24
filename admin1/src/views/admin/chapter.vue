@@ -87,7 +87,7 @@
         <!-- Button trigger modal -->
 
         <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -113,7 +113,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button"  v-on:click="save()" class="btn btn-primary" data-dismiss="modal">保存</button>
+                        <button type="button"  v-on:click="save()" class="btn btn-primary" >保存</button>
                     </div>
                 </div>
             </div>
@@ -147,37 +147,40 @@
             //该方法在页面加载后执行
             list(page){
                 let _this = this;
+
                 //查询每页之前对页面条数设置
                 _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',
                     {page :page, size : _this.$refs.pagination.size}).then((response)=>{
                     console.log("查询结果",response)
-                    _this.chapters = response.data.list
-                    //render是重新渲染(将数据传递到pagination组件内部)
-                    _this.$refs.pagination.render(page,response.data.total)
-                })
-            },
 
-            //模态框操作
-            add(){
-                //$(".modal")中的modal是CSS选择器,modal()中的参数(show和)是内置的方法，用于弹出或关闭模态框
-                $(".modal").modal("show")
+                    let resp = response.data;
+                    _this.chapters = resp.content.list
+                    //render是重新渲染(将数据传递到pagination组件内部)
+                    _this.$refs.pagination.render(page,resp.content.total)
+                })
             },
 
             //保存大章数据
             save(){
                 let  _this  = this
-                if(_this.chapter==''){
-                    alert("输入框不能为空")
+                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
+                    _this.chapter).then((response)=>{
+                    console.log("保存结果",response)
 
-                }else {
-                    _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
-                        _this.chapter).then((response)=>{
-                        console.log("保存结果",response)
-                    })
-                    //清空输入框
-                    _this.chapter=''
-                }
-            }
+                    let resp = response.data
+                    //判断保存是否成功(成功则关闭模态框并从新刷新列表)
+                    if(resp.success){
+                        $("#form-modal").modal("hide")
+                        //刷新列表
+                        _this.list(1)
+                    }
+                })
+            },
+            //模态框操作
+            add(){
+                //$("#form-modal")中的modal是CSS选择器,modal()中的参数(show和)是内置的方法，用于弹出或关闭模态框
+                $("#form-modal").modal("show")
+            },
         }
     }
 </script>
