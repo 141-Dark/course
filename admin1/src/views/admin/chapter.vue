@@ -191,16 +191,36 @@
             //删除大章数据
             del(id){
                 let  _this  = this
-                _this.ajax.delete('http://127.0.0.1:9000/business/admin/chapter/delete/'+id).then((response)=>{
-                    console.log("删除结果",response)
+                //加入弹出框
+                Swal.fire({
+                    title: '你确定删除吗?',
+                    text: "你将无法恢复该内容",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '确认!'
+                }).then((result) => {
+                    if (result.value) {
+                        _this.ajax.delete('http://127.0.0.1:9000/business/admin/chapter/delete/'+id).then((response)=>{
+                            console.log("删除结果",response)
 
-                    let resp = response.data
-                    //判断保存是否成功(成功则关闭模态框并从新刷新列表)
-                    if(resp.success){
-                        //刷新列表
-                        _this.list(1)
+                            let resp = response.data
+                            //判断保存是否成功(成功则关闭模态框并从新刷新列表)
+                            if(resp.success){
+                                //刷新列表
+                                _this.list(1)
+                                Swal.fire(
+                                    'Deleted!',
+                                    '删除成功',
+                                    'success'
+                                )
+                            }
+                        })
+
                     }
                 })
+
             },
         }
     }
