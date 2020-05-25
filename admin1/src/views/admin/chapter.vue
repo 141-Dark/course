@@ -144,10 +144,14 @@
             //该方法在页面加载后执行
             list(page){
                 let _this = this;
-
+                //请求之前先加载等待框
+                Loading.show()
                 //查询每页之前对页面条数设置
                 _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',
                     {page :page, size : _this.$refs.pagination.size}).then((response)=>{
+                    //关闭请求框
+                    Loading.hide()
+
                     console.log("查询结果",response)
 
                     let resp = response.data;
@@ -160,8 +164,11 @@
             //保存大章数据
             save(){
                 let  _this  = this
+                Loading.show()
+
                 _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
                     _this.chapter).then((response)=>{
+                    Loading.hide()
                     console.log("保存结果",response)
 
                     let resp = response.data
@@ -170,8 +177,8 @@
                         $("#form-modal").modal("hide")
                         //刷新列表
                         _this.list(1)
-                        //调用自定义的toast方法
-                        toast.success("操作成功！")
+                        //调用自定义的Toast方法
+                        Toast.success("操作成功！")
                     }
                 })
             },
@@ -193,33 +200,36 @@
             //删除大章数据
             del(id){
                 let  _this  = this
-                //加入弹出框
-                Swal.fire({
-                    title: '你确定删除吗?',
-                    text: "你将无法恢复该内容",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: '确认!'
-                }).then((result) => {
-                    if (result.value) {
-                        _this.ajax.delete('http://127.0.0.1:9000/business/admin/chapter/delete/'+id).then((response)=>{
-                            console.log("删除结果",response)
+                Conform.show("你将无法恢复删除的内容",function () {
+                    _this.ajax.delete('http://127.0.0.1:9000/business/admin/chapter/delete/'+id).then((response)=>{
+                        console.log("删除结果",response)
 
-                            let resp = response.data
-                            //判断保存是否成功(成功则关闭模态框并从新刷新列表)
-                            if(resp.success){
-                                //刷新列表
-                                _this.list(1)
-                                toast.success("删除成功！")
+                        let resp = response.data
+                        //判断保存是否成功(成功则关闭模态框并从新刷新列表)
+                        if(resp.success){
+                            //刷新列表
+                            _this.list(1)
+                            Toast.success("删除成功！")
 
-                            }
-                        })
+                        }
+                    })
 
-                    }
                 })
-
+                //加入弹出框
+            //     Swal.fire({
+            //         title: '你确定删除吗?',
+            //         text: "",
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: '确认!'
+            //     }).then((result) => {
+            //         if (result.value) {
+            //
+            //         }
+            //     })
+            //
             },
         }
     }
