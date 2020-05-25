@@ -17,6 +17,18 @@ insert into `chapter`(id,course_id,name ) values(011,000,'闪电绿壳龟');
 insert into `chapter`(id,course_id,name ) values(012,000,'种猪罗志祥');
 insert into `chapter`(id,course_id,name ) values(013,000,'云南彭于晏');
 insert into `chapter`(id,course_id,name ) values(014,000,'野猪罗志祥');
+insert into `chapter`(id,course_id,name ) values(015,000,'蒸汽小飞机1');
+insert into `chapter`(id,course_id,name ) values(016,000,'电动小马达1');
+insert into `chapter`(id,course_id,name ) values(017,000,'蒸汽小火车1');
+insert into `chapter`(id,course_id,name ) values(018,000,'佩奇老野猪1');
+insert into `chapter`(id,course_id,name ) values(019,000,'红烧大鲤鱼1');
+insert into `chapter`(id,course_id,name ) values(020,000,'火烤铜锣烧1');
+insert into `chapter`(id,course_id,name ) values(021,000,'夏天凉白开1');
+insert into `chapter`(id,course_id,name ) values(022,000,'11-16扛把子1');
+insert into `chapter`(id,course_id,name ) values(023,000,'闪电绿壳龟1');
+insert into `chapter`(id,course_id,name ) values(024,000,'种猪罗志祥1');
+insert into `chapter`(id,course_id,name ) values(025,000,'云南彭于晏1');
+insert into `chapter`(id,course_id,name ) values(026,000,'野猪罗志祥1');
 
 
 insert into `test`(id,name ) values(3,'蒸汽小飞机')

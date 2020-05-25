@@ -170,6 +170,8 @@
                         $("#form-modal").modal("hide")
                         //刷新列表
                         _this.list(1)
+                        //调用自定义的toast方法
+                        toast.success("操作成功！")
                     }
                 })
             },
@@ -210,11 +212,8 @@
                             if(resp.success){
                                 //刷新列表
                                 _this.list(1)
-                                Swal.fire(
-                                    'Deleted!',
-                                    '删除成功',
-                                    'success'
-                                )
+                                toast.success("删除成功！")
+
                             }
                         })
 
