@@ -92,17 +92,17 @@
                         <h4 class="modal-title" id="myModalLabel">表单</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" id="form-horizontal">
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-2 control-label">名称</label>
                                 <div class="col-sm-10">
-                                    <input type="text" v-model="chapter.name" class="form-control" id="inputEmail3" placeholder="名称">
+                                    <input type="text" v-model="chapter.name" class="form-control" id="inputEmail3" placeholder="名称" name="chapterName">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputEmail4" class="col-sm-2 control-label">课程ID</label>
                                 <div class="col-sm-10">
-                                    <input type="text" v-model="chapter.courseId" class="form-control" id="inputEmail4" placeholder="课程ID">
+                                    <input type="text" v-model="chapter.courseId" class="form-control" id="inputEmail4" placeholder="课程ID" name="courseId">
                                 </div>
                             </div>
 
@@ -139,6 +139,7 @@
             let _this = this
             _this.$refs.pagination.size = 5
             _this.list(1)
+
         },
         methods:{
             //该方法在页面加载后执行
@@ -146,7 +147,7 @@
                 let _this = this;
                 //请求之前先加载等待框
                 Loading.show()
-                //查询每页之前对页面条数设置
+                //查询每页之前对页面条数设置axios
                 _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',
                     {page :page, size : _this.$refs.pagination.size}).then((response)=>{
                     //关闭请求框
@@ -165,22 +166,61 @@
             save(){
                 let  _this  = this
                 Loading.show()
-
-                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
-                    _this.chapter).then((response)=>{
-                    Loading.hide()
-                    console.log("保存结果",response)
-
-                    let resp = response.data
-                    //判断保存是否成功(成功则关闭模态框并从新刷新列表)
-                    if(resp.success){
-                        $("#form-modal").modal("hide")
-                        //刷新列表
-                        _this.list(1)
-                        //调用自定义的Toast方法
-                        Toast.success("操作成功！")
+                $('#form-horizontal').bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields:{
+                        chapterName:{
+                            validators:{
+                                notEmpty:{
+                                    message: "课程名不能为空"
+                                }
+                            }
+                        },
+                        courseId:{
+                            validators:{
+                                notEmpty:{
+                                    message: "课程id不能为空"
+                                },
+                                stringLength: {
+                                    min: 6,
+                                    max: 18,
+                                    message: '密码长度必须在6到12位之间'
+                                },
+                            }
+                        }
                     }
                 })
+                let bootstrapValidator1 = $("#form-horizontal").data('bootstrapValidator');
+                bootstrapValidator1.validate();
+
+                if(!bootstrapValidator1.isValid()){
+                    alert('请完善输入项');
+                    return _this.list(1);
+                }else {
+                    _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
+                        _this.chapter).then((response)=>{
+                        Loading.hide()
+                        console.log("保存结果",response)
+
+                        let resp = response.data
+                        //判断保存是否成功(成功则关闭模态框并从新刷新列表)
+                        if(resp.success){
+                            $("#form-modal").modal("hide")
+                            //刷新列表
+                            _this.list(1)
+                            //调用自定义的Toast方法
+                            Toast.success("操作成功！")
+                        }
+                    })
+                }
+
+
+
             },
             //模态框操作
             add(){
