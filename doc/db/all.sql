@@ -32,3 +32,18 @@ insert into `chapter`(id,course_id,name ) values(026,000,'野猪罗志祥1');
 
 
 insert into `test`(id,name ) values(3,'蒸汽小飞机')
+
+# 创建小节
+CREATE TABLE `course`.`Untitled`  (
+    `id` char(8) NOT NULL COMMENT 'ID',
+    `title` varchar(50) NULL COMMENT '标题',
+    `course_id` char(8) NULL COMMENT '课程id',
+    `chapter_id` char(8) NULL COMMENT '大章id',
+    `video` varchar(200) NULL COMMENT '视频',
+    `time` int(100) NULL COMMENT '时长',
+    `charge` char(1) NULL COMMENT '是否收费',
+    `sort` int(255) NULL COMMENT '顺序',
+    `created_at` datetime NULL COMMENT '创建时间',
+    `updated_at` datetime NULL COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+);
