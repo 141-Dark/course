@@ -166,6 +166,7 @@
             save(){
                 let  _this  = this
                 Loading.show()
+                //前端校验
                 $('#form-horizontal').bootstrapValidator({
                     message: 'This value is not valid',
                     feedbackIcons: {
@@ -215,6 +216,9 @@
                             _this.list(1)
                             //调用自定义的Toast方法
                             Toast.success("操作成功！")
+                        }else {
+                            //弹出后端的提示框(这里的目的是检验如果没有前端校验，利用后端能否检验成功，这里成功了)
+                            Toast.warning(resp.message)
                         }
                     })
                 }

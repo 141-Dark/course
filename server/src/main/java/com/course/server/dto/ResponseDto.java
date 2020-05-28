@@ -1,7 +1,7 @@
 package com.course.server.dto;
 
 /*
-* 统一返回参数，在调用借口时可以快速得到返回的参数
+* 统一返回参数，在调用接口时可以快速得到返回的参数
 * 前端也可以针对此返回值做处理
 * */
 public class ResponseDto<T> {
