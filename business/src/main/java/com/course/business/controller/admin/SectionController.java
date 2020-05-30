@@ -14,6 +14,7 @@ import javax.xml.validation.Validator;
 @RestController
 @RequestMapping("/admin/section")
 public class SectionController {
+    public static final String BUSINESS_NAME= "小节";
     @Resource
     private SectionService sectionService;
 

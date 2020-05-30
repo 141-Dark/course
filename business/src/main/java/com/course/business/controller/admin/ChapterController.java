@@ -14,6 +14,7 @@ import javax.xml.validation.Validator;
 @RestController
 @RequestMapping("/admin/chapter")
 public class ChapterController {
+    public static final String BUSINESS_NAME= "大章";
     @Resource
     private ChapterService chapterService;
 

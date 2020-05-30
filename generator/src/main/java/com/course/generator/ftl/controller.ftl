@@ -1,4 +1,4 @@
-package com.course.business.controller.admin;
+package com.course.${module}.controller.admin;
 import com.course.server.dto.${Domain}Dto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
@@ -14,6 +14,7 @@ import javax.xml.validation.Validator;
 @RestController
 @RequestMapping("/admin/${domain}")
 public class ${Domain}Controller {
+    public static final String BUSINESS_NAME= "${tableNameCn}";
     @Resource
     private ${Domain}Service ${domain}Service;
 
