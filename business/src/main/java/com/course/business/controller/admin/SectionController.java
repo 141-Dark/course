@@ -14,7 +14,7 @@ import javax.xml.validation.Validator;
 @RestController
 @RequestMapping("/admin/section")
 public class SectionController {
-    public static final String BUSINESS_NAME= "小节";
+    public static final String BUSINESS_NAME= "";
     @Resource
     private SectionService sectionService;
 
@@ -31,6 +31,10 @@ public class SectionController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody SectionDto sectionDto){
         //对保存做校验
+        ValidatorUtil.require(sectionDto.getTitle(),"小节名称");
+        ValidatorUtil.require(sectionDto.getCourseId(),"课程id");
+        ValidatorUtil.require(sectionDto.getChapterId(),"大章id");
+        ValidatorUtil.length(sectionDto.getCourseId(),"课程id",1,8);
 
         //新建统一返回值
         ResponseDto responseDto = new ResponseDto();

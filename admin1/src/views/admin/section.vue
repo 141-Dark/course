@@ -15,7 +15,7 @@
         <table id="simple-table" class="table  table-bordered table-hover">
                     <thead>
                     <tr>
-                                                    <th>ID</th>
+                        <th>ID</th>
                             <th>标题</th>
                             <th>课程id</th>
                             <th>大章id</th>
@@ -107,66 +107,50 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="form-horizontal">
+
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+                                    <label for="inputEmail1" class="col-sm-2 control-label">标题</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.id" class="form-control" id="inputEmail3" placeholder="ID" name="sectionName">
+                                        <input type="text" v-model="section.title" class="form-control" id="inputEmail1" placeholder="标题" name="sectionTitle">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+                                    <label for="inputEmail2" class="col-sm-2 control-label">课程id</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.title" class="form-control" id="inputEmail3" placeholder="标题" name="sectionName">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">课程id</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" v-model="section.courseId" class="form-control" id="inputEmail3" placeholder="课程id" name="sectionName">
+                                        <input type="text" v-model="section.courseId" class="form-control" id="inputEmail2" placeholder="课程id" name="courseId">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-2 control-label">大章id</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.chapterId" class="form-control" id="inputEmail3" placeholder="大章id" name="sectionName">
+                                        <input type="text" v-model="section.chapterId" class="form-control" id="inputEmail3" placeholder="大章id" name="chapterId">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">视频</label>
+                                    <label for="inputEmail4" class="col-sm-2 control-label">视频</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.video" class="form-control" id="inputEmail3" placeholder="视频" name="sectionName">
+                                        <input type="text" v-model="section.video" class="form-control" id="inputEmail4" placeholder="视频" name="video">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">时长</label>
+                                    <label for="inputEmail6" class="col-sm-2 control-label">时长</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.time" class="form-control" id="inputEmail3" placeholder="时长" name="sectionName">
+                                        <input type="text" v-model="section.time" class="form-control" id="inputEmail6" placeholder="时长" name="time">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">是否收费</label>
+                                    <label for="inputEmail7" class="col-sm-2 control-label">是否收费</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.charge" class="form-control" id="inputEmail3" placeholder="是否收费" name="sectionName">
+                                        <input type="text" v-model="section.charge" class="form-control" id="inputEmail7" placeholder="是否收费" name="charge">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">顺序</label>
+                                    <label for="inputEmail8" class="col-sm-2 control-label">顺序</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.sort" class="form-control" id="inputEmail3" placeholder="顺序" name="sectionName">
+                                        <input type="text" v-model="section.sort" class="form-control" id="inputEmail8" placeholder="顺序" name="sort">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">创建时间</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" v-model="section.createdAt" class="form-control" id="inputEmail3" placeholder="创建时间" name="sectionName">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">修改时间</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" v-model="section.updatedAt" class="form-control" id="inputEmail3" placeholder="修改时间" name="sectionName">
-                                    </div>
-                                </div>
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -227,24 +211,70 @@
             save(){
                 let  _this  = this
                 Loading.show()
-                _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/save',
-                    _this.section).then((response)=>{
-                    Loading.hide()
-                    console.log("保存结果",response)
-
-                    let resp = response.data
-                    //判断保存是否成功(成功则关闭模态框并从新刷新列表)
-                    if(resp.success){
-                        $("#form-modal").modal("hide")
-                        //刷新列表
-                        _this.list(1)
-                        //调用自定义的Toast方法
-                        Toast.success("操作成功！")
-                    }else {
-                        //弹出后端的提示框(这里的目的是检验如果没有前端校验，利用后端能否检验成功，这里成功了)
-                        Toast.warning(resp.message)
+                //前端校验
+                $('#form-horizontal').bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields:{
+                        sectionTitle:{
+                            validators:{
+                                notEmpty:{
+                                    message: "小节标题不能为空"
+                                }
+                            }
+                        },
+                        courseId:{
+                            validators:{
+                                notEmpty:{
+                                    message: "课程id不能为空"
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 13,
+                                    message: 'id长度必须在1到8位之间'
+                                },
+                            }
+                        },
+                        chapterId:{
+                            validators:{
+                                notEmpty:{
+                                    message: "大章id不能为空"
+                                }
+                            }
+                        },
                     }
                 })
+                let bootstrapValidator1 = $("#form-horizontal").data('bootstrapValidator');
+                bootstrapValidator1.validate();
+
+                if(!bootstrapValidator1.isValid()){
+                    alert('请完善输入项');
+                    return _this.list(1);
+                }else {
+                    _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/save',
+                        _this.section).then((response)=>{
+                        Loading.hide()
+                        console.log("保存结果",response)
+
+                        let resp = response.data
+                        //判断保存是否成功(成功则关闭模态框并从新刷新列表)
+                        if(resp.success){
+                            $("#form-modal").modal("hide")
+                            //刷新列表
+                            _this.list(1)
+                            //调用自定义的Toast方法
+                            Toast.success("操作成功！")
+                        }else {
+                            //弹出后端的提示框(这里的目的是检验如果没有前端校验，利用后端能否检验成功，这里成功了)
+                            Toast.warning(resp.message)
+                        }
+                    })
+                }
+
 
 
             },
