@@ -148,7 +148,7 @@
                 //请求之前先加载等待框
                 Loading.show()
                 //查询每页之前对页面条数设置axios
-                _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',
+                _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/list',
                     {page :page, size : _this.$refs.pagination.size}).then((response)=>{
                     //关闭请求框
                     Loading.hide()
@@ -188,9 +188,9 @@
                                     message: "课程id不能为空"
                                 },
                                 stringLength: {
-                                    min: 6,
-                                    max: 18,
-                                    message: '密码长度必须在6到12位之间'
+                                    min: 1,
+                                    max: 8,
+                                    message: '密码长度必须在1到8位之间'
                                 },
                             }
                         }
@@ -203,7 +203,7 @@
                     alert('请完善输入项');
                     return _this.list(1);
                 }else {
-                    _this.ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',
+                    _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/save',
                         _this.chapter).then((response)=>{
                         Loading.hide()
                         console.log("保存结果",response)
@@ -245,7 +245,7 @@
             del(id){
                 let  _this  = this
                 Conform.show("你将无法恢复删除的内容",function () {
-                    _this.ajax.delete('http://127.0.0.1:9000/business/admin/chapter/delete/'+id).then((response)=>{
+                    _this.ajax.delete(process.env.VUE_APP_SERVER+'/business/admin/chapter/delete/'+id).then((response)=>{
                         console.log("删除结果",response)
 
                         let resp = response.data

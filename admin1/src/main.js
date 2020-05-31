@@ -9,3 +9,5 @@ new Vue({
     router,
   render: h => h(App),
 }).$mount('#app')
+//这是固定写法
+console.log("当前环境是：",process.env.NODE_ENV)
