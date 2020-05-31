@@ -1,7 +1,11 @@
 package com.course.generator.util;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,7 +22,7 @@ public class DbUtil {
             String url = "jdbc:mysql://localhost:3306/course";
             String user = "course";
             String pwd = "123";
-            con = DriverManager.getConnection(url,user,pwd);
+            con = (Connection) DriverManager.getConnection(url,user,pwd);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -29,10 +33,9 @@ public class DbUtil {
     * 获得表的注释
     * */
     public static String getTableComment(String tableName) throws SQLException {
-        Connection con = getConnection();
-        Statement statement = con.createStatement();
-        ResultSet rs  = statement.executeQuery("select table_comment form information_schema.tables " +
-                "WHERE table_name='" + tableName + "'");
+        Connection connection = getConnection();
+        Statement statement = (Statement) connection.createStatement();
+        ResultSet rs  = statement.executeQuery("select TABLE_COMMENT from information_schema.TABLES where TABLE_NAME='"+tableName+"'");
         String tableNameCH = "";
         if (rs!=null){
             while (rs.next()){
@@ -52,7 +55,7 @@ public class DbUtil {
     public static List<Field> getColumnByTableName(String tableName) throws SQLException {
         List<Field> fieldList = new ArrayList<>();
         Connection connection = getConnection();
-        Statement statement = connection.createStatement();
+        Statement statement = (Statement) connection.createStatement();
         ResultSet rs = statement.executeQuery("show full columns from " + tableName);
         if (rs!=null){
             while (rs.next()){
