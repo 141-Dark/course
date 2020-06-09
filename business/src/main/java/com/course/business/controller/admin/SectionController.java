@@ -7,6 +7,7 @@ import com.course.server.utils.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.xml.validation.Validator;
+import java.text.ParseException;
 
 /*
 * RequestMapping和PostMapping的区别在于Post指定了前端传递参数的方式必须是Post
@@ -29,7 +30,7 @@ public class SectionController {
     }
 
     @PostMapping("/save")
-    public ResponseDto save(@RequestBody SectionDto sectionDto){
+    public ResponseDto save(@RequestBody SectionDto sectionDto) throws ParseException {
         //对保存做校验
         ValidatorUtil.require(sectionDto.getTitle(),"小节名称");
         ValidatorUtil.require(sectionDto.getCourseId(),"课程id");

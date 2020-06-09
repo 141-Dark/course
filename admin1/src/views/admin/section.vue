@@ -139,9 +139,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail7" class="col-sm-2 control-label">是否收费</label>
+                                    <label  class="col-sm-2 control-label">是否收费</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="section.charge" class="form-control" id="inputEmail7" placeholder="是否收费" name="charge">
+<!--                                        <input list="typelist"  type="text" v-model="section.charge" class="form-control" id="inputEmail7" placeholder="是否收费" name="charge">-->
+<!--                                        <datalist id="typelist">-->
+<!--                                            <option>付费</option>-->
+<!--                                            <option>免费</option>-->
+<!--                                            <option>试看5分钟</option>-->
+<!--                                        </datalist>-->
+                                        <select v-model="section.charge" id="typelist" class="form-control">
+                                            <option v-for="charge in charges">{{charge.name}}</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -171,11 +179,14 @@
         components:{
             pagination
         },
-        name:"section",
+        name:"section1",
         data:function () {
             return{
                 sections:[],
-                section:{}
+                section:{},
+                charges:[{name:'收费'},
+                    {name:'免费'},
+                    {name:'试看五分钟'}]
             }
         },
         mounted() {
@@ -274,9 +285,6 @@
                         }
                     })
                 }
-
-
-
             },
             //模态框操作
             add(){
@@ -311,21 +319,7 @@
                     })
 
                 })
-                //加入弹出框
-            //     Swal.fire({
-            //         title: '你确定删除吗?',
-            //         text: "",
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: '确认!'
-            //     }).then((result) => {
-            //         if (result.value) {
-            //
-            //         }
-            //     })
-            //
+
             },
         }
     }

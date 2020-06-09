@@ -95,9 +95,9 @@
                         <form class="form-horizontal" id="form-horizontal">
                             <#list fieldList as field>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">${field.nameCn}</label>
+                                    <label class="col-sm-2 control-label">${field.nameCn}</label>
                                     <div class="col-sm-10">
-                                        <input type="text" v-model="${domain}.${field.nameHump}" class="form-control" id="inputEmail3" placeholder="${field.nameCn}" name="${domain}Name">
+                                        <input type="text" v-model="${domain}.${field.nameHump}" class="form-control" placeholder="${field.nameCn}" name="${domain}${field.nameBigHump}">
                                     </div>
                                 </div>
                             </#list>

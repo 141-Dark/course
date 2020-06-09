@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +53,7 @@ public class SectionService {
     /*
     * 在这里同时实现新增和修改，所以这里要做一点判断（如果id属性有值则认为是修改，没有值则认为是新增）
     * */
-    public void save(SectionDto sectionDto){
+    public void save(SectionDto sectionDto) throws ParseException {
         //判断是否为空,如果为空则调用insert方法
         if(StringUtils.isEmpty(sectionDto.getId())){
             this.insert(sectionDto);
@@ -64,7 +67,7 @@ public class SectionService {
     * */
     private void update(SectionDto sectionDto){
         Section section = new Section();
-        section.setUpdatedAt(new Date());
+        sectionDto.setUpdatedAt(new Date());
         //类型转换
         BeanUtils.copyProperties(sectionDto,section);
 
@@ -76,16 +79,18 @@ public class SectionService {
      * 在插入数据时要先将dto转换成dao，在取出数据集时，将dao转为dto
      * 这个方法没有被Controller调用，只被save方法调用过
      * */
-    private void insert(SectionDto sectionDto){
+    private void insert(SectionDto sectionDto) throws ParseException {
         //设置id
         sectionDto.setId(UuidUtil.getShortId());
-        //插入数据时添加时间段
-        Date now = new Date();
-
         Section section = new Section();
-        section.setCreatedAt(now);//创建插入的时间
-        section.setUpdatedAt(now);//修改时间是当前时间
-        System.out.println("执行到这"+now);
+
+        //插入数据时添加时间段及时间格式
+        Date date = new Date();
+        sectionDto.setCreatedAt(date);//创建插入的时间
+        sectionDto.setUpdatedAt(date);//修改时间是当前时间
+
+        //对于最新注册的用户都是非会员的，所以要设置视频都是付费的
+        //sectionDto.setCharge("否");
         //类型转换
         BeanUtils.copyProperties(sectionDto,section);
 

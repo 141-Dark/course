@@ -47,3 +47,21 @@ CREATE TABLE `course`.`Untitled`  (
     `updated_at` datetime NULL COMMENT '修改时间',
     PRIMARY KEY (`id`)
 );
+
+#创建课程表
+CREATE TABLE `course`.`course`  (
+  `id` char(8) NOT NULL COMMENT '课程id',
+  `name` varchar(50) NULL COMMENT '课程名',
+  `summary` varchar(2000) NULL COMMENT '简介',
+  `time` int(255) NULL COMMENT '时长（秒）',
+  `price` decimal(8,2) NULL COMMENT '价格',
+  `image` varchar(100) NULL COMMENT '封面',
+  `level` char(5) NULL COMMENT '级别',
+  `charge` char(5) NULL COMMENT '是否收费',
+  `status` char(5) NULL COMMENT '课程状态',
+  `enroll` integer(255) NULL COMMENT '报名人数',
+  `sort` int(255) NULL COMMENT '顺序',
+  `created_at` datetime NULL COMMENT '创建时间',
+  `updated_at` datetime NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+);
