@@ -1,7 +1,12 @@
 <template>
     <div>
+        <h2>{{course.name}}</h2>
         <p>
-            <button @click="add()" class="btn btn-white btn-default btn-round">
+            <router-link to="/business/course" class="btn btn-white btn-default btn-round">
+                <i class="ace-icon fa fa-arrow-left"></i>
+                返回课程
+            </router-link>
+            &emsp;<button @click="add()" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-edit"></i>
                 增加
             </button>
@@ -130,16 +135,30 @@
         data:function () {
             return{
                 chapters:[],
-                chapter:{}
+                chapter:{},
+                course:{}
             }
         },
         mounted() {
             //调用父组件的方法
             //this.$parent.activeSlidebar("business-chapter-sidebar")
             let _this = this
+
+            //在缓存中取出数据，并清空缓存
+            let course = sessionStorage.getItem('course')||{}//防止直接访问chapter时造成错误
+            //如果是空则跳回到course.vue页面中
+            console.log(course)
+            let v = JSON.parse(course)
+            if(Tools.isEmpty(v)){
+                _this.$router.push("/welcome")
+            }
+            _this.course = v
+
+            //清空缓存
+            //sessionStorage.clear()
+
             _this.$refs.pagination.size = 5
             _this.list(1)
-
         },
         methods:{
             //该方法在页面加载后执行
@@ -259,21 +278,7 @@
                     })
 
                 })
-                //加入弹出框
-            //     Swal.fire({
-            //         title: '你确定删除吗?',
-            //         text: "",
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: '确认!'
-            //     }).then((result) => {
-            //         if (result.value) {
-            //
-            //         }
-            //     })
-            //
+
             },
         }
     }

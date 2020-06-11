@@ -12,95 +12,60 @@
             </button>
         </p>
         <pagination ref="pagination" v-bind:list="list" v-bind:item-count="8"></pagination>
-        <table id="simple-table" class="table  table-bordered table-hover">
-                    <thead>
-                    <tr>
-                                                    <th>课程id</th>
-                            <th>课程名</th>
-                            <th>简介</th>
-                            <th>时长（秒）</th>
-                            <th>价格</th>
-                            <th>封面</th>
-                            <th>级别</th>
-                            <th>是否收费</th>
-                            <th>课程状态</th>
-                            <th>报名人数</th>
-                            <th>顺序</th>
-                            <th>创建时间</th>
-                            <th>修改时间</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
 
-                    <tbody>
-                    <tr v-for="course in courses">
-                            <td>{{course.id}}</td>
-                            <td>{{course.name}}</td>
-                            <td>{{course.summary}}</td>
-                            <td>{{course.time}}</td>
-                            <td>{{course.price}}</td>
-                            <td>{{course.image}}</td>
-                            <td>{{course.level}}</td>
-                            <td>{{course.charge}}</td>
-                            <td>{{course.status}}</td>
-                            <td>{{course.enroll}}</td>
-                            <td>{{course.sort}}</td>
-                            <td>{{course.createdAt}}</td>
-                            <td>{{course.updatedAt}}</td>
+        <div class="row">
+            <div class="col-md-4" v-for="course in courses">
+                <div class="thumbnail search-thumbnail">
+                    <!--如果没有上传封面则显示默认封面-->
+                    <img v-show="!course.image" class="media-object" src="/static/images/course.jpg"/>
+                    <img v-show="course.image" class="media-object" v-bind:src="course.image"/>
+                    <div class="caption">
+                        <div class="clearfix">
+                            <span class="pull-right label label-grey info-label">{{course.level}}</span>
+                            <span class="pull-right label label-grey info-label">{{course.charge}}</span>
+                            <span class="pull-right label label-grey info-label">{{course.status}}</span>
+                        </div>
 
-                        <td>
-                            <div class="hidden-sm hidden-xs btn-group">
-
-                                <button @click="edit(course)" class="btn btn-xs btn-info">
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                </button>
-
-                                <button @click="del(course.id)" class="btn btn-xs btn-danger">
-                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                </button>
-
-                                <button class="btn btn-xs btn-warning">
-                                    <i class="ace-icon fa fa-flag bigger-120"></i>
-                                </button>
-                            </div>
-
-                            <div class="hidden-md hidden-lg">
-                                <div class="inline pos-rel">
-                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                                    </button>
-
-                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                        <li>
-                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                <span class="blue">
-                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                <span class="green">
-                                                    <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                <span class="red">
-                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <h3 class="search-title">
+                            <a href="#" class="blue">{{course.name}}</a>
+                        </h3>
+                        <h3 class="search-title">
+                            <a href="#" class="red">惊爆价：{{course.price}}￥</a>
+                        </h3>
+                        <p>{{course.summary}}</p>
+                        <td class="hidden-480">
+                            <span class="label label-success arrowed-in arrowed-in-right">序号：{{course.sort}}</span>&emsp;
+                            <span class="label label-success arrowed-in arrowed-in-right">id：{{course.id}}</span>&emsp;
+                            <span class="label label-success arrowed-in arrowed-in-right">时长：{{course.time}}</span>
+                            <span class="label label-success arrowed-in arrowed-in-right">已报名{{course.enroll}}人</span>
                         </td>
-                    </tr>
-                    </tbody>
-                </table>
+                        <br>
+                        <td class="hidden-480">
+                            <span class="label label-info arrowed-in arrowed-in-right">创建时间：{{course.createdAt}}</span>
+                        </td>
+
+                        <td class="hidden-480">
+                            <span class="label label-info arrowed-in arrowed-in-right">修改时间：{{course.updatedAt}}</span>
+                        </td>
+                        <br>
+                        <p>
+                            <button @click="toChapter(course)" class="btn btn-xs btn-warning">
+                                <i class="ace-icon fa fa-flag bigger-120"></i>查看章节
+                            </button>
+
+                            <button @click="edit(course)" class="btn btn-xs btn-info">
+                                <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
+                            </button>
+
+                            <button @click="del(course.id)" class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>删除
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Button trigger modal -->
 
         <!-- Modal -->
@@ -225,7 +190,7 @@
             //调用父组件的方法
             //this.$parent.activeSlidebar("business-course-sidebar")
             let _this = this
-            _this.$refs.pagination.size = 5
+            _this.$refs.pagination.size = 3
             _this.list(1)
 
         },
@@ -249,6 +214,14 @@
                 })
             },
 
+            //点击实现跳转到课程中的大章,用html5中的localStorage缓存
+            toChapter(course){
+                let _this = this
+
+                //存入缓存，要在chapter中将缓存中的数据取出来（mounted中操作）
+                sessionStorage.setItem("course",JSON.stringify(course))
+                _this.$router.push("/business/chapter")
+            },
             //保存数据
             save(){
                 let  _this  = this
@@ -309,9 +282,6 @@
                         }
                     })
                 }
-
-
-
             },
             //模态框操作
             add(){
@@ -346,21 +316,6 @@
                     })
 
                 })
-                //加入弹出框
-            //     Swal.fire({
-            //         title: '你确定删除吗?',
-            //         text: "",
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: '确认!'
-            //     }).then((result) => {
-            //         if (result.value) {
-            //
-            //         }
-            //     })
-            //
             },
         }
     }
