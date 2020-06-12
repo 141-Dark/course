@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -71,6 +72,7 @@ public class SectionService {
     /*
     * 在这里同时实现新增和修改，所以这里要做一点判断（如果id属性有值则认为是修改，没有值则认为是新增）
     * */
+    @Transactional
     public void save(SectionDto sectionDto) throws ParseException {
         //判断是否为空,如果为空则调用insert方法
         if(StringUtils.isEmpty(sectionDto.getId())){

@@ -36,7 +36,7 @@
                         <td class="hidden-480">
                             <span class="label label-success arrowed-in arrowed-in-right">序号：{{course.sort}}</span>&emsp;
                             <span class="label label-success arrowed-in arrowed-in-right">id：{{course.id}}</span>&emsp;
-                            <span class="label label-success arrowed-in arrowed-in-right">时长：{{course.time}}</span>
+                            <span class="label label-success arrowed-in arrowed-in-right">时长：{{course.time|formatSecond}}</span>
                             <span class="label label-success arrowed-in arrowed-in-right">已报名{{course.enroll}}人</span>
                         </td>
                         <br>
