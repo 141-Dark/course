@@ -1,7 +1,10 @@
 package com.course.business.controller.admin;
+import com.course.server.domain.Section;
+import com.course.server.domain.SectionExample;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.service.SectionService;
 import com.course.server.utils.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +23,15 @@ public class SectionController {
     private SectionService sectionService;
 
     @RequestMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
-        sectionService.list(pageDto);
+    public ResponseDto list(@RequestBody SectionPageDto sectionPageDto) {
+        //判断课程id和大章id不能为空
+        ValidatorUtil.require(sectionPageDto.getCourseId(),"课程id");
+        ValidatorUtil.require(sectionPageDto.getChapterId(),"大章id");
+
+        sectionService.list(sectionPageDto);
         //新建统一返回值
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(pageDto);//设置返回的数据
+        responseDto.setContent(sectionPageDto);//设置返回的数据
 
         return responseDto;
     }

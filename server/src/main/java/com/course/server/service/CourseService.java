@@ -6,6 +6,7 @@ import com.course.server.domain.SectionExample;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.CourseMapper;
+import com.course.server.mapper.mine.MyCourseMapper;
 import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,11 @@ import java.util.List;
 public class CourseService {
     @Resource
     private CourseMapper courseMapper;
+
+    //将MyCourseMapper注入进来(让平级sectionMapper的调用)
+    @Resource
+    private MyCourseMapper myCourseMapper;
+
     public void list(PageDto pageDto){
         //指定当前页码和页面中的数据条数
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -99,5 +105,9 @@ public class CourseService {
 
     public void delete(String id) {
         courseMapper.deleteByPrimaryKey(id);
+    }
+
+    public void updateTime(String courseId){
+        myCourseMapper.updateTime(courseId);
     }
 }

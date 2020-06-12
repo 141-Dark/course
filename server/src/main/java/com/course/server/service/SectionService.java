@@ -4,6 +4,8 @@ import com.course.server.domain.Section;
 import com.course.server.domain.SectionExample;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.SectionPageDto;
+import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.SectionMapper;
 import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -24,17 +26,33 @@ import java.util.List;
 public class SectionService {
     @Resource
     private SectionMapper sectionMapper;
-    public void list(PageDto pageDto){
+
+    //注入courseService
+    @Resource
+    private CourseService courseService;
+
+    public void list(SectionPageDto sectionPageDto){
         //指定当前页码和页面中的数据条数
-        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+        PageHelper.startPage(sectionPageDto.getPage(),sectionPageDto.getSize());
         SectionExample sectionExample = new SectionExample();
+
+        SectionExample.Criteria criteria = sectionExample.createCriteria();
+        //进行非空操作
+        if(!StringUtils.isEmpty(sectionPageDto.getCourseId())){
+            criteria.andCourseIdEqualTo(sectionPageDto.getCourseId());
+        }
+
+        if (!StringUtils.isEmpty(sectionPageDto.getChapterId())){
+            criteria.andChapterIdEqualTo(sectionPageDto.getChapterId());
+        }
+
         //按顺序排列
         sectionExample.setOrderByClause("sort asc");
         List<Section> sectionList = sectionMapper.selectByExample(sectionExample);//根据条件输出
 
         //设置总页数
         PageInfo<Section> pageInfo = new PageInfo<>(sectionList);
-        pageDto.setTotal(pageInfo.getTotal());
+        sectionPageDto.setTotal(pageInfo.getTotal());
 
         //完成从数据库实体拷贝到dto实体
         List<SectionDto> sectionDtoList = new ArrayList<SectionDto>();
@@ -47,7 +65,7 @@ public class SectionService {
             sectionDtoList.add(sectionDto);
         }
         //返回数据集
-        pageDto.setList(sectionDtoList);
+        sectionPageDto.setList(sectionDtoList);
     }
 
     /*
@@ -61,6 +79,10 @@ public class SectionService {
             //更新（修改）内容
             this.update(sectionDto);
         }
+
+         //调用平级的courseService中的代码实现时间长度的累加（根据课程id来实现累加）
+        courseService.updateTime(sectionDto.getCourseId());
+
     }
     /*
     * 更新(这个方法是service内部使用的，所以不要暴露出去)
@@ -101,4 +123,6 @@ public class SectionService {
     public void delete(String id) {
         sectionMapper.deleteByPrimaryKey(id);
     }
+
+
 }

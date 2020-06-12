@@ -1,12 +1,11 @@
 package com.course.business.controller.admin;
 import com.course.server.dto.ChapterDto;
-import com.course.server.dto.PageDto;
+import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.ChapterService;
 import com.course.server.utils.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import javax.xml.validation.Validator;
 
 /*
 * RequestMapping和PostMapping的区别在于Post指定了前端传递参数的方式必须是Post
@@ -19,11 +18,12 @@ public class ChapterController {
     private ChapterService chapterService;
 
     @RequestMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
-        chapterService.list(pageDto);
+    public ResponseDto list(@RequestBody ChapterPageDto chapterPageDto) {
+        ValidatorUtil.require(chapterPageDto.getCourseId(),"课程id");//校验课程id是不是空
+        chapterService.list(chapterPageDto);
         //新建统一返回值
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(pageDto);//设置返回的数据
+        responseDto.setContent(chapterPageDto);//设置返回的数据
 
         return responseDto;
     }

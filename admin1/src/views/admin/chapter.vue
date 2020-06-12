@@ -37,15 +37,15 @@
                             <div class="hidden-sm hidden-xs btn-group">
 
                                 <button @click="edit(chapter)" class="btn btn-xs btn-info">
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
                                 </button>
 
                                 <button @click="del(chapter.id)" class="btn btn-xs btn-danger">
-                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>删除
                                 </button>
 
-                                <button class="btn btn-xs btn-warning">
-                                    <i class="ace-icon fa fa-flag bigger-120"></i>
+                                <button class="btn btn-xs btn-warning" @click="toSection(chapter,course)">
+                                    <i class="ace-icon fa fa-flag bigger-120"></i>小节
                                 </button>
                             </div>
 
@@ -94,7 +94,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">表单</h4>
+                        <h4 class="modal-title" id="myModalLabel">添加课程小节</h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="form-horizontal">
@@ -105,9 +105,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputEmail4" class="col-sm-2 control-label">课程ID</label>
+                                <label  class="col-sm-2 control-label">课程ID</label>
                                 <div class="col-sm-10">
-                                    <input type="text" v-model="chapter.courseId" class="form-control" id="inputEmail4" placeholder="课程ID" name="courseId">
+                                     <!--<input type="text" v-model="chapter.courseId" class="form-control" id="inputEmail4" placeholder="课程ID" name="courseId">-->
+                                    <p class="form-control-static">{{course.id}}  ({{course.name}})</p>
                                 </div>
                             </div>
 
@@ -168,7 +169,7 @@
                 Loading.show()
                 //查询每页之前对页面条数设置axios
                 _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/list',
-                    {page :page, size : _this.$refs.pagination.size}).then((response)=>{
+                    {page :page, size : _this.$refs.pagination.size,courseId:_this.course.id}).then((response)=>{
                     //关闭请求框
                     Loading.hide()
 
@@ -197,26 +198,18 @@
                         chapterName:{
                             validators:{
                                 notEmpty:{
-                                    message: "课程名不能为空"
+                                    message: "小节名不能为空"
                                 }
                             }
                         },
-                        courseId:{
-                            validators:{
-                                notEmpty:{
-                                    message: "课程id不能为空"
-                                },
-                                stringLength: {
-                                    min: 1,
-                                    max: 8,
-                                    message: '密码长度必须在1到8位之间'
-                                },
-                            }
-                        }
+
                     }
                 })
                 let bootstrapValidator1 = $("#form-horizontal").data('bootstrapValidator');
                 bootstrapValidator1.validate();
+
+                //将传过来的课程id赋值给chapter中的课程id
+                _this.chapter.courseId = _this.course.id
 
                 if(!bootstrapValidator1.isValid()){
                     alert('请完善输入项');
@@ -241,10 +234,8 @@
                         }
                     })
                 }
-
-
-
             },
+
             //模态框操作
             add(){
                 let _this = this
@@ -280,6 +271,15 @@
                 })
 
             },
+
+            //跳转到小节
+            toSection(chapter,course){
+                let _this = this
+                sessionStorage.setItem('chapter',JSON.stringify(chapter))
+                sessionStorage.setItem('courseFromChapter',JSON.stringify(course))
+
+                _this.$router.push("/business/section")
+            }
         }
     }
 </script>

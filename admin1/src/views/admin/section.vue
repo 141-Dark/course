@@ -1,5 +1,15 @@
 <template>
     <div>
+
+        <router-link to="/business/chapter">
+            <i class="orange ace-icon fa fa-location-arrow bigger-130"></i>
+            <span class="bigger-110">返回小节</span>
+        </router-link>&emsp;&emsp;&emsp;&emsp;
+        <router-link to="/business/course">
+            <i class="orange ace-icon fa fa-tags bigger-130"></i>
+            <span class="bigger-110">返回课程</span>
+        </router-link>
+        <h4>{{course.name}}:{{chapter.name}}</h4>
         <p>
             <button @click="add()" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-edit"></i>
@@ -103,7 +113,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">表单</h4>
+                        <h4 class="modal-title" id="myModalLabel">新增小节</h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="form-horizontal">
@@ -114,18 +124,18 @@
                                         <input type="text" v-model="section.title" class="form-control" id="inputEmail1" placeholder="标题" name="sectionTitle">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail2" class="col-sm-2 control-label">课程id</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" v-model="section.courseId" class="form-control" id="inputEmail2" placeholder="课程id" name="courseId">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">大章id</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" v-model="section.chapterId" class="form-control" id="inputEmail3" placeholder="大章id" name="chapterId">
-                                    </div>
-                                </div>
+<!--                                <div class="form-group">-->
+<!--                                    <label for="inputEmail2" class="col-sm-2 control-label">课程id</label>-->
+<!--                                    <div class="col-sm-10">-->
+<!--                                        <input type="text" v-model="section.courseId" class="form-control" id="inputEmail2" placeholder="课程id" name="courseId">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <label for="inputEmail3" class="col-sm-2 control-label">大章id</label>-->
+<!--                                    <div class="col-sm-10">-->
+<!--                                        <input type="text" v-model="section.chapterId" class="form-control" id="inputEmail3" placeholder="大章id" name="chapterId">-->
+<!--                                    </div>-->
+<!--                                </div>-->
                                 <div class="form-group">
                                     <label for="inputEmail4" class="col-sm-2 control-label">视频</label>
                                     <div class="col-sm-10">
@@ -186,13 +196,29 @@
                 section:{},
                 charges:[{name:'收费'},
                     {name:'免费'},
-                    {name:'试看五分钟'}]
+                    {name:'试看五分钟'}],
+                chapter:{},
+                course:{},
             }
         },
         mounted() {
             //调用父组件的方法
             //this.$parent.activeSlidebar("business-section-sidebar")
             let _this = this
+
+            //取出缓存中的数据
+            let chapter = sessionStorage.getItem('chapter')||{}
+            let course = sessionStorage.getItem('courseFromChapter')||{}
+
+            let ch = JSON.parse(chapter)
+            let cou = JSON.parse(course)
+
+            if(Tools.isEmpty(ch)||Tools.isEmpty(cou)){
+                _this.$router.push("/business/welcome")
+            }
+
+            _this.course = cou
+            _this.chapter = ch
             _this.$refs.pagination.size = 5
             _this.list(1)
 
@@ -205,7 +231,7 @@
                 Loading.show()
                 //查询每页之前对页面条数设置axios
                 _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/list',
-                    {page :page, size : _this.$refs.pagination.size}).then((response)=>{
+                    {page :page, size : _this.$refs.pagination.size,courseId:_this.course.id,chapterId:_this.chapter.id     }).then((response)=>{
                     //关闭请求框
                     Loading.hide()
 
@@ -238,27 +264,31 @@
                                 }
                             }
                         },
-                        courseId:{
-                            validators:{
-                                notEmpty:{
-                                    message: "课程id不能为空"
-                                },
-                                stringLength: {
-                                    min: 1,
-                                    max: 13,
-                                    message: 'id长度必须在1到8位之间'
-                                },
-                            }
-                        },
-                        chapterId:{
-                            validators:{
-                                notEmpty:{
-                                    message: "大章id不能为空"
-                                }
-                            }
-                        },
+                        // courseId:{
+                        //     validators:{
+                        //         notEmpty:{
+                        //             message: "课程id不能为空"
+                        //         },
+                        //         stringLength: {
+                        //             min: 1,
+                        //             max: 13,
+                        //             message: 'id长度必须在1到8位之间'
+                        //         },
+                        //     }
+                        // },
+                        // chapterId:{
+                        //     validators:{
+                        //         notEmpty:{
+                        //             message: "大章id不能为空"
+                        //         }
+                        //     }
+                        // },
                     }
                 })
+                //接收大章id和课程id
+                _this.section.courseId = _this.course.id
+                _this.section.chapterId = _this.chapter.id
+
                 let bootstrapValidator1 = $("#form-horizontal").data('bootstrapValidator');
                 bootstrapValidator1.validate();
 

@@ -407,4 +407,7 @@ public class ChapterExample {
             this(condition, value, secondValue, null);
         }
     }
+
+    public class createCriteria {
+    }
 }

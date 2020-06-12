@@ -3,7 +3,8 @@ package com.course.server.service;
 import com.course.server.domain.Chapter;
 import com.course.server.domain.ChapterExample;
 import com.course.server.dto.ChapterDto;
-import com.course.server.dto.PageDto;
+import com.course.server.dto.ChapterPageDto;
+import com.course.server.exception.ValidatorException;
 import com.course.server.mapper.ChapterMapper;
 import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -20,16 +21,23 @@ import java.util.List;
 public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
-    public void list(PageDto pageDto){
+    public void list(ChapterPageDto chapterPageDto){
         //指定当前页码和页面中的数据条数
-        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+        PageHelper.startPage(chapterPageDto.getPage(),chapterPageDto.getSize());
         ChapterExample chapterExample = new ChapterExample();
+
+        //ChapterExample.Criteria cri= chapterExample.createCriteria();
+        //先判断传进来的值是不是空值
+        if(!StringUtils.isEmpty(chapterPageDto.getCourseId())){
+            //根据id输出(chapterExample.createCriteria()只可以使用一次，在多条件查询时可以将它提取出来，如上)
+           chapterExample.createCriteria().andCourseIdEqualTo(chapterPageDto.getCourseId());
+        }
 
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);//根据条件输出
 
         //设置总页数
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
-        pageDto.setTotal(pageInfo.getTotal());
+        chapterPageDto.setTotal(pageInfo.getTotal());
 
         //完成从数据库实体拷贝到dto实体
         List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
@@ -42,7 +50,7 @@ public class ChapterService {
             chapterDtoList.add(chapterDto);
         }
         //返回数据集
-        pageDto.setList(chapterDtoList);
+        chapterPageDto.setList(chapterDtoList);
     }
 
     /*
