@@ -65,3 +65,11 @@ CREATE TABLE `course`.`course`  (
   `updated_at` datetime NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `course`.`Untitled`  (
+  `id` char(8) NOT NULL COMMENT 'id',
+  `parent` char(8) NOT NULL COMMENT '父id',
+  `name` varchar(50) NULL COMMENT '名称',
+  `sort` int(255) NULL COMMENT '顺序',
+  PRIMARY KEY (`id`)
+);

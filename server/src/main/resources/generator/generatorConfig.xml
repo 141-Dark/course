@@ -41,6 +41,7 @@
 <!--       <table tableName="count" domainObjectName="Count"></table>-->
 <!--       <table tableName="chapter" domainObjectName="Chapter"></table>-->
 <!--       <table tableName="section" domainObjectName="Section"></table>-->
-       <table tableName="course" domainObjectName="Course"></table>
+<!--       <table tableName="course" domainObjectName="Course"></table>-->
+       <table tableName="category" domainObjectName="Category"></table>
    </context>
 </generatorConfiguration>
