@@ -78,7 +78,12 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="form-horizontal">
-
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">添加分类</label>
+                                <div class="col-sm-12">
+                                    <ul id="tree" class="ztree"></ul>
+                                </div>
+                            </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">课程名</label>
                                     <div class="col-sm-10">
@@ -183,7 +188,8 @@
                     {name:'章节试看'}],
                 //状态
                 status:[{name:'已完成'},
-                    {name:'未完成'}]
+                    {name:'未完成'}],
+                categorys:[],
             }
         },
         mounted() {
@@ -193,6 +199,9 @@
             _this.$refs.pagination.size = 3
             _this.list(1)
 
+            //初始化树形分类
+            _this.initTree()
+            _this.allCategory()
         },
         methods:{
             //该方法在页面加载后执行
@@ -317,6 +326,46 @@
 
                 })
             },
+
+            //显示所有的分类
+            allCategory(){
+                let _this = this;
+
+                //请求之前先加载等待框
+                Loading.show()
+                //查询每页之前对页面条数设置axios
+                _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/category/all',
+                ).then((response)=>{
+                    //关闭请求框
+                    Loading.hide()
+                    let resp = response.data;
+                    _this.categorys = resp.content
+
+                    _this.initTree()
+                })
+
+            },
+            //初始化树形结构
+            initTree() {
+                let _this = this
+                var setting = {
+                    check: {
+                        enable: true
+                    },
+                    data: {
+                        simpleData: {
+                            //指定相关的数据
+                            idKey:"id",
+                            pIdKey:"parent",
+                            rootPId:"000",
+                            enable: true
+                        }
+                    }
+                };
+
+                let zNodes = _this.categorys
+                $.fn.zTree.init($("#tree"),setting,zNodes)
+            }
         }
     }
 </script>

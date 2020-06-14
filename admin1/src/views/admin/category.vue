@@ -237,6 +237,7 @@
             //this.$parent.activeSlidebar("business-category-sidebar")
             let _this = this
 
+            //开始周期时先执行这个方法
             _this.all()
 
         },
@@ -259,7 +260,7 @@
                     _this.level1 = []//先清空
                     for(let i = 0;i<_this.categorys.length;i++){
                         let p = _this.categorys[i]
-                        //判断parent是不是000，如果是则存到level1中(000代表的是父结构)
+                        //判断parent是不是000，如果是则存到level1中(parent值为000代表的是没有父节点了)
                         if(p.parent == '000'){
                             _this.level1.push(p)
                             //从新遍历一次，找到与父节点id相同的节点，然后存入children中
@@ -356,7 +357,7 @@
                 _this.category = {
                     parent:"000"
                 }
-                //$("#form-modal")中的modal是CSS选择器,modal()中的参数(show和)是内置的方法，用于弹出或关闭模态框
+                //$("#form-modal")中的modal是CSS选择器,modal()中的参数(show和hide)是内置的方法，用于弹出或关闭模态框
                 $("#form-modal").modal("show")
             },//新增子节点
             add2(){
