@@ -32,6 +32,8 @@ public class CourseService {
     @Resource
     private CourseCategoryService courseCategoryService;
 
+    @Resource
+    private ChapterService chapterService;//注入大章service
     public void list(PageDto pageDto){
         //指定当前页码和页面中的数据条数
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -113,6 +115,13 @@ public class CourseService {
 
     public void delete(String id) {
         courseMapper.deleteByPrimaryKey(id);
+        //删除课程对应下的大章和小节
+        deleteChapterAndSection(id);
+    }
+
+    //删除课程对应的大章
+    private void deleteChapterAndSection(String courseId){
+        chapterService.deleteChaptetAndSection(courseId);
     }
 
     public void updateTime(String courseId){

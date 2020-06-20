@@ -21,6 +21,8 @@ import java.util.List;
 public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
+    @Resource
+    private SectionService sectionService;
     public void list(ChapterPageDto chapterPageDto){
         //指定当前页码和页面中的数据条数
         PageHelper.startPage(chapterPageDto.getPage(),chapterPageDto.getSize());
@@ -95,5 +97,19 @@ public class ChapterService {
 
     public void delete(String id) {
         chapterMapper.deleteByPrimaryKey(id);
+    }
+
+    //删除课程下的对应的大章和小节
+    public void deleteChaptetAndSection(String courseId){
+        ChapterExample example = new ChapterExample();
+        example.createCriteria().andCourseIdEqualTo(courseId);
+        chapterMapper.deleteByExample(example);
+
+        //删除小节时最好从这开始调用，不要从course层直接删除
+        deleteSection(courseId);
+    }
+
+    private void deleteSection(String courseId){
+        sectionService.deleteSection(courseId);
     }
 }

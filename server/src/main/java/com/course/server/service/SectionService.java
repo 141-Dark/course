@@ -126,5 +126,10 @@ public class SectionService {
         sectionMapper.deleteByPrimaryKey(id);
     }
 
-
+    //删除课程下的所有小节（这里由大章直接调用）
+    public void deleteSection(String courseId) {
+        SectionExample sectionExample = new SectionExample();
+        sectionExample.createCriteria().andCourseIdEqualTo(courseId);
+        sectionMapper.deleteByExample(sectionExample);
+    }
 }
