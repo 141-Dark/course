@@ -190,6 +190,7 @@
                 status:[{name:'已完成'},
                     {name:'未完成'}],
                 categorys:[],
+                tree:[],
             }
         },
         mounted() {
@@ -234,7 +235,21 @@
             //保存数据
             save(){
                 let  _this  = this
+                //拿到tree中的数据
+                let tree = _this.tree.getCheckedNodes()
+                if(Tools.isEmpty(tree)){
+                    Toast.warning("请先选分类")
+                    return
+                }
+                //console.log(tree)
+                //将数据存到course中，然后一起传递到后台，注意与dto中的命名规范保持一致
+                _this.course.tree = tree
+
+                    if (Tools.isEmpty(_this.course)){
+                    Toast.warning("课程为空")
+                }
                 Loading.show()
+
                 //前端校验
                 $('#form-horizontal').bootstrapValidator({
                     message: 'This value is not valid',
@@ -272,6 +287,7 @@
                     alert('请完善输入项');
                     return _this.list(1);
                 }else {
+
                     _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/course/save',
                         _this.course).then((response)=>{
                         Loading.hide()
@@ -296,6 +312,8 @@
             add(){
                 let _this = this
                 _this.course = {}
+                //添加的时候树节点不选中
+                _this.tree.checkAllNodes(false)
                 //$("#form-modal")中的modal是CSS选择器,modal()中的参数(show和)是内置的方法，用于弹出或关闭模态框
                 $("#form-modal").modal("show")
             },
@@ -304,6 +322,10 @@
                 let _this = this
                 //解决vue双向绑定时不保存也会显示修改后的数据（并没有真正保存到数据库）的问题
                 _this.course = $.extend({},course)//临时放到{}中
+                //编辑的时候选中节点
+                let courseId = _this.course.id
+                _this.findCategory(courseId)
+                console.log("课程id是"+courseId)
                 $("#form-modal").modal("show")
             },
 
@@ -364,7 +386,25 @@
                 };
 
                 let zNodes = _this.categorys
-                $.fn.zTree.init($("#tree"),setting,zNodes)
+                //将选中的数据存入tree，然后在保存数据的时候取出来
+                _this.tree =$.fn.zTree.init($("#tree"),setting,zNodes)
+            },
+            findCategory(courseId){
+                let _this= this
+                Loading.show()
+                _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/course/findCategory/'+courseId).then((response)=>{
+                    Loading.hide()
+                    console.log("分类结构果：",response)
+                    let resp = response.data
+                    let categorys = resp.content
+
+                    //勾选查询到的分类
+                    _this.tree.checkAllNodes(false)
+                    for(let i = 0;i<categorys.length;i++){
+                        let node = _this.tree.getNodeByParam("id",categorys[i].categoryId)
+                        _this.tree.checkNode(node,true)
+                    }
+                })
             }
         }
     }

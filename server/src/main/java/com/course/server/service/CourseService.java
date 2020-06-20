@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -27,6 +28,9 @@ public class CourseService {
     //将MyCourseMapper注入进来(让平级sectionMapper的调用)
     @Resource
     private MyCourseMapper myCourseMapper;
+
+    @Resource
+    private CourseCategoryService courseCategoryService;
 
     public void list(PageDto pageDto){
         //指定当前页码和页面中的数据条数
@@ -59,6 +63,7 @@ public class CourseService {
     /*
     * 在这里同时实现新增和修改，所以这里要做一点判断（如果id属性有值则认为是修改，没有值则认为是新增）
     * */
+    @Transactional
     public void save(CourseDto courseDto){
         //判断id是否为空,如果为空则调用insert方法
         if(StringUtils.isEmpty(courseDto.getId())){
@@ -67,6 +72,9 @@ public class CourseService {
             //更新（修改）内容
             this.update(courseDto);
         }
+        //保存分类，可能同时有多个分类
+        courseCategoryService.save(courseDto.getId(),courseDto.getTree());
+
     }
     /*
     * 更新(这个方法是service内部使用的，所以不要暴露出去)

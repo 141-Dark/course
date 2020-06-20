@@ -31,7 +31,7 @@ insert into `chapter`(id,course_id,name ) values(025,000,'云南彭于晏1');
 insert into `chapter`(id,course_id,name ) values(026,000,'野猪罗志祥1');
 
 
-insert into `test`(id,name ) values(3,'蒸汽小飞机')
+insert into `test`(id,name ) values(3,'蒸汽小飞机');
 
 # 创建小节
 CREATE TABLE `course`.`Untitled`  (
@@ -73,3 +73,12 @@ CREATE TABLE `course`.`Untitled`  (
   `sort` int(255) NULL COMMENT '顺序',
   PRIMARY KEY (`id`)
 );
+
+#是备份数据库中的标志性语言，如果数据库中存在此表则将这个表移除
+drop table if exists `course_category`;
+create table `course_category`(
+  `id` char(8) not null comment 'id',
+  `course_id` char(8) comment '课程id',
+  `category_id` char(8) comment '分类id',
+  primary key ('id')
+) engine = innodb default charset=utf8mb4 comment = '课程分类';

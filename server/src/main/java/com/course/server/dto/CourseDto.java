@@ -1,6 +1,8 @@
 package com.course.server.dto;
         import java.math.BigDecimal;
         import java.util.Date;
+        import java.util.List;
+
         import com.fasterxml.jackson.annotation.JsonFormat;
 public class CourseDto {
         /**
@@ -55,7 +57,42 @@ public class CourseDto {
         /**
         * 修改时间，数据格式保持一致
         */
-        @JsonFormat(pattern = "yyyy-MM-dd:mm:ss",timezone="GMT+8")
+
+        /**
+         * 增加一条分类的数据，添加时间2020年6月14日22:19:48，注意要与course.vue中额的参数保持一致
+         * */
+        private List<CategoryDto> tree;
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("CourseDto{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", summary='").append(summary).append('\'');
+        sb.append(", time=").append(time);
+        sb.append(", price=").append(price);
+        sb.append(", image='").append(image).append('\'');
+        sb.append(", level='").append(level).append('\'');
+        sb.append(", charge='").append(charge).append('\'');
+        sb.append(", status='").append(status).append('\'');
+        sb.append(", enroll=").append(enroll);
+        sb.append(", sort=").append(sort);
+        sb.append(", createdAt=").append(createdAt);
+        sb.append(", tree=").append(tree);
+        sb.append(", updatedAt=").append(updatedAt);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public List<CategoryDto> getTree() {
+        return tree;
+    }
+
+    public void setTree(List<CategoryDto> tree) {
+        this.tree = tree;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd:mm:ss",timezone="GMT+8")
         private Date updatedAt;
         public String getId(){
               return id;
@@ -149,26 +186,5 @@ public class CourseDto {
               this.updatedAt = updatedAt;
         }
 
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append("[");
-        sb.append("Hash = ").append(hashCode());
-            sb.append(",id=").append(id);
-            sb.append(",name=").append(name);
-            sb.append(",summary=").append(summary);
-            sb.append(",time=").append(time);
-            sb.append(",price=").append(price);
-            sb.append(",image=").append(image);
-            sb.append(",level=").append(level);
-            sb.append(",charge=").append(charge);
-            sb.append(",status=").append(status);
-            sb.append(",enroll=").append(enroll);
-            sb.append(",sort=").append(sort);
-            sb.append(",createdAt=").append(createdAt);
-            sb.append(",updatedAt=").append(updatedAt);
-        sb.append("]");
-        return sb.toString();
-    }
+
 }
