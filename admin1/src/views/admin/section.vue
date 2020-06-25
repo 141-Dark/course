@@ -254,7 +254,8 @@
                     feedbackIcons: {
                         valid: 'glyphicon glyphicon-ok',
                         invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
+                        validating: 'glyphicon ' +
+                            'glyphicon-refresh'
                     },
                     fields:{
                         sectionTitle:{
@@ -311,7 +312,7 @@
                             Toast.success("操作成功！")
                         }else {
                             //弹出后端的提示框(这里的目的是检验如果没有前端校验，利用后端能否检验成功，这里成功了)
-                            Toast.warning(resp.message)
+                            Toast.warning(resp.message+"测试")
                         }
                     })
                 }

@@ -11,8 +11,7 @@
         <module>server</module>
         <module>business</module>
         <module>generator</module>
-        <module>test</module>
-        <module>test</module>
+        <module>dotest</module>
     </modules>
     <dependencies>
         <dependency>

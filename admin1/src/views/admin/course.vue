@@ -56,6 +56,9 @@
                             <button @click="edit(course)" class="btn btn-xs btn-info">
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
                             </button>
+                            <button @click="editContent(course)" class="btn btn-xs btn-info">
+                                <i class="ace-icon  fa fa-pencil-square-o bigger-120"></i>添加内容
+                            </button>
 
                             <button @click="del(course.id)" class="btn btn-xs btn-danger">
                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>删除
@@ -158,6 +161,31 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         <button type="button"  v-on:click="save()" class="btn btn-primary" >保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 编辑内容-->
+        <div id="course-form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">内容编辑</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" >
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <div id="content"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button"  v-on:click="saveContent()" class="btn btn-primary" >保存</button>
                     </div>
                 </div>
             </div>
@@ -389,6 +417,8 @@
                 //将选中的数据存入tree，然后在保存数据的时候取出来
                 _this.tree =$.fn.zTree.init($("#tree"),setting,zNodes)
             },
+
+            //编辑时显示分类
             findCategory(courseId){
                 let _this= this
                 Loading.show()
@@ -404,6 +434,57 @@
                         let node = _this.tree.getNodeByParam("id",categorys[i].categoryId)
                         _this.tree.checkNode(node,true)
                     }
+                })
+            },
+
+            //编辑内容
+            editContent(course){
+                let _this = this
+                _this.course = course
+                let id = course.id;
+                //初始化编辑框
+                $("#content").summernote({
+                    focus:true,
+                    height:300
+                })
+                //清空历史文本框（参考官方文档）
+                $("#content").summernote('code','')
+                //加载
+                Loading.show()
+
+                //$("#course-form-modal").modal({backdrop:'static',keyboard:false})//即点击空白地方模态框不会关闭
+                //显示已有的内容
+                _this.ajax.get(process.env.VUE_APP_SERVER+'/business/admin/course/find-content/'+id).then((response)=>{
+                    Loading.hide()
+                    let resp = response.data
+                    if(resp.success){
+                        $("#course-form-modal").modal({backdrop:'static',keyboard:false})//即点击空白地方模态框不会关闭
+                        //将内容显示到页面(参考官方文档)
+                        if(resp.content){
+                            $("#content").summernote('code',resp.content.content)
+                        }
+                    }else{
+                        Toast.warning(resp.message)
+                    }
+                })
+            },
+            //保存数据
+            saveContent(){
+                let _this = this
+                let content =$("#content").summernote('code');
+                _this.ajax.post(process.env.VUE_APP_SERVER+'/business/admin/course/save-content',
+                    {
+                        id:_this.course.id,
+                        content:content
+                    }).then((response)=>{
+                    Loading.hide()
+                    let resp = response.data;
+                    if(resp.success){
+                        Toast.success("内容保存成功")
+                    }else{
+                        Toast.warning("图片太大，请压缩")
+                    }
+
                 })
             }
         }

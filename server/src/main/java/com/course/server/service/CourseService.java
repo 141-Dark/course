@@ -1,10 +1,13 @@
 package com.course.server.service;
 
 import com.course.server.domain.Course;
+import com.course.server.domain.CourseContent;
 import com.course.server.domain.CourseExample;
 import com.course.server.domain.SectionExample;
+import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
+import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.mine.MyCourseMapper;
 import com.course.server.utils.UuidUtil;
@@ -20,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.springframework.beans.BeanUtils.*;
+
 @Service
 public class CourseService {
     @Resource
@@ -34,6 +39,10 @@ public class CourseService {
 
     @Resource
     private ChapterService chapterService;//注入大章service
+
+    @Resource
+    private CourseContentMapper courseContentMapper;//注入课程内容mapper
+
     public void list(PageDto pageDto){
         //指定当前页码和页面中的数据条数
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -54,7 +63,7 @@ public class CourseService {
             Course course = courseList.get(i);
             CourseDto courseDto = new CourseDto();
             //完成domian到dto的拷贝
-            BeanUtils.copyProperties(course,courseDto);
+            copyProperties(course,courseDto);
             //将dto中的值添加到courseDtoList列表中
             courseDtoList.add(courseDto);
         }
@@ -87,7 +96,7 @@ public class CourseService {
         Date date = new Date();
         courseDto.setUpdatedAt(date);
         //类型转换
-        BeanUtils.copyProperties(courseDto,course);
+        copyProperties(courseDto,course);
 
         courseMapper.updateByPrimaryKey(course);
 
@@ -107,7 +116,7 @@ public class CourseService {
         courseDto.setUpdatedAt(date);
         Course course = new Course();
         //类型转换
-        BeanUtils.copyProperties(courseDto,course);
+        copyProperties(courseDto,course);
 
         courseMapper.insert(course);
 
@@ -126,5 +135,29 @@ public class CourseService {
 
     public void updateTime(String courseId){
         myCourseMapper.updateTime(courseId);
+    }
+
+    //加载数据库中的内容(这里的id就是课程id，因为课程表与内容表是一对一的关系，所以可以共用一个id)
+    public CourseContentDto findContent(String id){
+        CourseContentDto courseContentDto = new CourseContentDto();
+        CourseContent courseContent = courseContentMapper.selectByPrimaryKey(id);
+        if(courseContent == null) {
+            return null;
+        }
+        //将取到的数据转换为dto
+         BeanUtils.copyProperties(courseContent, courseContentDto);
+        return courseContentDto;
+
+    }
+    //保存内容
+    public int saveContent(CourseContentDto courseContentDto){
+        CourseContent courseContent = new CourseContent();
+        BeanUtils.copyProperties(courseContentDto,courseContent);
+        //先进行更新，没有更新到再插入，没有更新到时会返回一个值，根据值来看是否插入
+        int i = courseContentMapper.updateByPrimaryKeyWithBLOBs(courseContent);
+        if(i == 0){
+            courseContentMapper.insert(courseContent);
+        }
+        return i;
     }
 }

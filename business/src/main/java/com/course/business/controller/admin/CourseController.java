@@ -1,8 +1,7 @@
 package com.course.business.controller.admin;
-import com.course.server.dto.CourseCategoryDto;
-import com.course.server.dto.CourseDto;
-import com.course.server.dto.PageDto;
-import com.course.server.dto.ResponseDto;
+import com.course.server.domain.CourseContent;
+import com.course.server.dto.*;
+import com.course.server.exception.ValidatorException;
 import com.course.server.service.CourseCategoryService;
 import com.course.server.service.CourseService;
 import com.course.server.utils.ValidatorUtil;
@@ -24,7 +23,7 @@ public class CourseController {
     @Resource
     private CourseCategoryService courseCategoryService;
 
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto) {
         courseService.list(pageDto);
         //新建统一返回值
@@ -66,5 +65,27 @@ public class CourseController {
         responseDto.setContent(dtoList);
         System.out.println("执行到这里");
         return responseDto;
+    }
+
+    //获取内容
+    @GetMapping("/find-content/{id}")
+    public ResponseDto findContent(@PathVariable String id){
+        ResponseDto responseDto = new ResponseDto();
+        CourseContentDto courseContentDto = courseService.findContent(id);
+        responseDto.setContent(courseContentDto);
+        return responseDto;
+    }
+    //保存内容
+    @PostMapping("/save-content")
+    public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto){
+        try{
+            ResponseDto responseDto = new ResponseDto();
+            courseService.saveContent(courseContentDto);
+            return responseDto;
+        }
+        catch (Exception e){
+            throw new ValidatorException("图片太大，请压缩图片");
+        }
+
     }
 }

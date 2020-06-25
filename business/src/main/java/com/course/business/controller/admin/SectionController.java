@@ -43,7 +43,7 @@ public class SectionController {
         ValidatorUtil.require(sectionDto.getCourseId(),"课程id");
         ValidatorUtil.require(sectionDto.getChapterId(),"大章id");
         ValidatorUtil.length(sectionDto.getCourseId(),"课程id",1,8);
-
+        ValidatorUtil.length(sectionDto.getTitle(),"课程名",1,8);
         //新建统一返回值
         ResponseDto responseDto = new ResponseDto();
         sectionService.save(sectionDto);
